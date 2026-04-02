@@ -106,9 +106,60 @@ class PayrollApp:
 
     def calculate_payroll(self):
         """
-        This method retrieves data from the GUI, uses the Object-Oriented models to calculate the salary based on the employee type, and displays the result.
+        Retrieves data from the GUI, uses the Object-Oriented models to calculate 
+        the salary based on the employee type, and displays the result.
         """
-        # Por ahora solo mostraremos un mensaje de prueba para verificar que el botón funciona.
-        # En el próximo paso, conectaremos esto con nuestras clases de models.py
-        messagebox.showinfo(
-            "Action", "Button clicked! Calculation logic pending.")
+        try:
+            # 1. Obtenemos los textos básicos (ID y Nombre)
+            emp_id = self.entry_id.get()
+            name = self.entry_name.get()
+
+            # Validamos que no estén vacíos
+            if not emp_id or not name:
+                messagebox.showwarning(
+                    "Input Error", "Please enter ID and Name.")
+                return
+
+            # 2. Convertimos los textos numéricos a decimales (float)
+            # Si el campo está vacío, le ponemos un '0' por defecto
+            val_salary = float(self.entry_salary.get() or 0)
+            val_extra = float(self.entry_extra.get() or 0)
+            val_rate = float(self.entry_rate.get() or 0)
+
+            # 3. Identificamos qué tipo de empleado seleccionó el usuario
+            emp_type = self.employee_type_var.get()
+            employee = None
+
+            # 4. Instanciamos la clase hija correspondiente
+            if emp_type == "Full-Time Employee":
+                # args: emp_id, name, base_salary, bonus_percentage
+                employee = FullTimeEmployee(emp_id, name, val_salary, val_rate)
+
+            elif emp_type == "Hourly Employee":
+                # args: emp_id, name, hourly_rate, hours_worked
+                employee = HourlyEmployee(emp_id, name, val_salary, val_extra)
+
+            elif emp_type == "Commission Employee":
+                # args: emp_id, name, base_salary, commission_rate, sales_amount
+                employee = CommissionedEmployee(
+                    emp_id, name, val_salary, val_rate, val_extra)
+
+            else:
+                messagebox.showerror(
+                    "Error", "Please select a valid employee type.")
+                return
+
+            # 5. Aplicamos el poliformismo.
+            # No nos importa qué tipo de empleado sea, solo le decimos "calcula tu salario".
+            # Python sabrá qué fórmula matemática usar.
+            total_salary = employee.calculate_salary()
+            details = employee.get_details()
+
+            # 6. Mostramos el resultado en la pantalla
+            result_text = f"{details}\nTotal Calculated Salary: ${total_salary:.2f}"
+            self.result_label.config(text=result_text, fg="green")
+
+        except ValueError:
+            # Si el usuario escribe letras en lugar de números en el salario, evitamos que el programa explote.
+            messagebox.showerror(
+                "Input Error", "Please enter valid numbers for salary, hours, sales, or rates.")
