@@ -4,13 +4,13 @@ Description: Handles the graphical user interface (GUI) using Tkinter.
 All visible text is in English as required.
 """
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import ttk, messagebox
 
 # Importamos las clases que ya creamos en nuestro "cerebro"
 from models import FullTimeEmployee, HourlyEmployee, CommissionedEmployee
 
 
-class PyrollApp:
+class PayrollApp:
     """
     Main class for the GUI application.
     """
@@ -42,7 +42,7 @@ class PyrollApp:
         self.employee_type_var = tk.StringVar()
         self.combo_type = ttk.Combobox(
             self.type_frame,
-            textvariable=self.employee_type,
+            textvariable=self.employee_type_var,
             state="readonly",
             values=["Full-Time Employee",
                     "Hourly Employee", "Commissioned Employee"]
@@ -56,44 +56,42 @@ class PyrollApp:
         self.input_frame.pack(fill="x", pady=10)
 
         # 1. ID del empleado
-        tk.Label(self.input_frame, text="Employee ID:").gird(
+        tk.Label(self.input_frame, text="Employee ID:").grid(
             row=0, column=0, sticky="w", pady=5)
         self.entry_id = tk.Entry(self.input_frame)
-        self.entry_id.gird(row=0, column=1, pady=5, padx=5)
+        self.entry_id.grid(row=0, column=1, pady=5, padx=5)
 
         # 2. Nombre del empleado
-        tk.Label(self.input_frame, text="Name:").gird(
+        tk.Label(self.input_frame, text="Name:").grid(
             row=1, column=0, sticky="w", pady=5)
         self.entry_name = tk.Entry(self.input_frame)
-        self.entry_name.gird(row=1, column=1, pady=5, padx=5)
+        self.entry_name.grid(row=1, column=1, pady=5, padx=5)
 
         # 3. Salario base (Aplica para tiempo completo y comisionados)
-        tk.Label(self.input_frame, text="Base Salary / Hourly Rate ($):").gird(
+        tk.Label(self.input_frame, text="Base Salary / Hourly Rate ($):").grid(
             row=2, column=0, sticky="w", pady=5)
         self.entry_salary = tk.Entry(self.input_frame)
-        self.entry_salary.gird(row=2, column=1, pady=5, padx=5)
+        self.entry_salary.grid(row=2, column=1, pady=5, padx=5)
 
         # 4. Campo dinámico (Puede ser horas trabajadas o ventas totales)
-        tk.Label(self.input_frame, text="Hours Worked / Total Sales ($):").gird(
+        tk.Label(self.input_frame, text="Hours Worked / Total Sales ($):").grid(
             row=3, column=0, sticky="w", pady=5)
         self.entry_extra = tk.Entry(self.input_frame)
-        self.entry_extra.gird(row=3, column=1, pady=5, padx=5)
+        self.entry_extra.grid(row=3, column=1, pady=5, padx=5)
 
         # 5. Campo dinámico de porcentajes (Bono o Comisión)
-        tk.Label(self.input_frame, text="Bonus / Commission Rate (%):").gird(
+        tk.Label(self.input_frame, text="Bonus / Commission Rate (%):").grid(
             row=4, column=0, sticky="w", pady=5)
         self.entry_rate = tk.Entry(self.input_frame)
-        self.entry_rate.gird(row=4, column=1, pady=5, padx=5)
+        self.entry_rate.grid(row=4, column=1, pady=5, padx=5)
 
         # Botón de calcular
         self.calc_button = tk.Button(
-            self.roor,
+            self.root,
             text="Calculate Salary",
-            bg="#4CAF50",
-            fg="white",
             font=("Arial", 10, "bold"),
             # Esta es la función que se ejecutará al hacer clic en el botón
-            command=self.calculate_pyroll
+            command=self.calculate_payroll
         )
         self.calc_button.pack(pady=15)
 
