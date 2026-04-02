@@ -160,6 +160,6 @@ class PayrollApp:
             self.result_label.config(text=result_text, fg="green")
 
         except ValueError:
-            # Si el usuario escribe letras en lugar de números en el salario, evitamos que el programa explote.
+            # Si el usuario escribe letras en lugar de números en el salario, evitamos que el programa explote
             messagebox.showerror(
                 "Input Error", "Please enter valid numbers for salary, hours, sales, or rates.")
